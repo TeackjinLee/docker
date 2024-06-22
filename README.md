@@ -115,16 +115,24 @@ docker-compose는 기본적으로 'docker-compose.yml' 또는 'docker-compose.ya
 1. 컨테이너 환경에서의 Heap Memory 설정<br>
   - JVM은 기본적으로 물리적인 메모리를 할당하게 설정<br>
   - 이후 컨테이너 환경에서의 운영환경이 발달함에 따라 컨테이너의 메모리를 기준으로 할당하는 기능이 추가<br>
-  1.1 InitialRamPercentage
+  1.1 InitialRamPercentage<br>
     - Java 애플리케이션의 초기 힙 사이즈를 설정하기 위해 사용되는 매개변수 백분율을 사용하여 설정<br>
       Default: 1.5625%<br>
-  1.2 MinRamPercentage
+  1.2 MinRamPercentage<br>
     - 적은 메모리 사이즈에서 운영되는 애플리케이션에서의 최대 힙 사이즈를 설정하기 위해 사용<br>
       이런 경우 MaxRamPercentage의 설정은 무시됨<br>
       Default: 50%<br>
   1.3 MaxRamPercentage<br>
     - 충분한 양의 메모리에서 운영되는 애플리케이션의 최대 힙 사이즈를 설정하기 위해 사용
-      Default: 25%
+      Default: 25%<br>
+![image](https://github.com/TeackjinLee/docker/assets/85720454/f2908eff-f2d5-4221-9c5c-dea009c4e936)
+<br>
+2. 테스트를 위해 사용되는 주요 커맨드 조합<br>
+  - Docker 커맨드를 활용하여 테스트를 수행 (테스트 환경 : Windows)<br>
+  - Mac/Linux의 경우 find 커맨드를 grep으로 수정하여 사용 가능<br>
+![image](https://github.com/TeackjinLee/docker/assets/85720454/dfe95e79-229c-4cc3-ab7c-ab57c4410938)
+
+
 
 
 
