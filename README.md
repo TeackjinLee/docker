@@ -109,6 +109,23 @@ docker-compose는 기본적으로 'docker-compose.yml' 또는 'docker-compose.ya
         > docker export test123 > test123.tar<br>
     - import<br>
       - 추출된 tar파일을 이미지로 불러옴<br>
-        > docker import test123.tar test123:version
+        > docker import test123.tar test123:version<br>
+<br>
+# 컨테이너 환경에서의 JVM 메모리 설정
+1. 컨테이너 환경에서의 Heap Memory 설정<br>
+  - JVM은 기본적으로 물리적인 메모리를 할당하게 설정<br>
+  - 이후 컨테이너 환경에서의 운영환경이 발달함에 따라 컨테이너의 메모리를 기준으로 할당하는 기능이 추가<br>
+  1.1 InitialRamPercentage
+    - Java 애플리케이션의 초기 힙 사이즈를 설정하기 위해 사용되는 매개변수 백분율을 사용하여 설정<br>
+      Default: 1.5625%<br>
+  1.2 MinRamPercentage
+    - 적은 메모리 사이즈에서 운영되는 애플리케이션에서의 최대 힙 사이즈를 설정하기 위해 사용<br>
+      이런 경우 MaxRamPercentage의 설정은 무시됨<br>
+      Default: 50%<br>
+  1.3 MaxRamPercentage<br>
+    - 충분한 양의 메모리에서 운영되는 애플리케이션의 최대 힙 사이즈를 설정하기 위해 사용
+      Default: 25%
+
+
 
 
