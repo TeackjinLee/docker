@@ -125,12 +125,12 @@ docker-compose는 기본적으로 'docker-compose.yml' 또는 'docker-compose.ya
   1.3 MaxRamPercentage<br>
     - 충분한 양의 메모리에서 운영되는 애플리케이션의 최대 힙 사이즈를 설정하기 위해 사용
       Default: 25%<br>
-![image](https://github.com/TeackjinLee/docker/assets/85720454/f2908eff-f2d5-4221-9c5c-dea009c4e936)
+<img src="https://github.com/TeackjinLee/docker/assets/85720454/f2908eff-f2d5-4221-9c5c-dea009c4e936"/><br>
 <br>
 2. 테스트를 위해 사용되는 주요 커맨드 조합<br>
   - Docker 커맨드를 활용하여 테스트를 수행 (테스트 환경 : Windows)<br>
   - Mac/Linux의 경우 find 커맨드를 grep으로 수정하여 사용 가능<br>
-![image](https://github.com/TeackjinLee/docker/assets/85720454/dfe95e79-229c-4cc3-ab7c-ab57c4410938)
+<img src="https://github.com/TeackjinLee/docker/assets/85720454/dfe95e79-229c-4cc3-ab7c-ab57c4410938"/><br>
 
 
 
