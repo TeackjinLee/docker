@@ -1,0 +1,5 @@
+# 도커 교과서
+실습 환경을 초기화 하려면 다음 명령어 사용<br>
+> docker container rm -f $(docker container ls -aq)<br>
+이미지가 차지한 디스크 용량을 모두 회수
+> docker image rm -f (docker image ls -f reference='diamol/*' -q)<br>
