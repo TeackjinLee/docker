@@ -1,11 +1,45 @@
+![image](https://github.com/user-attachments/assets/fd0e4caf-0f83-43b8-b49c-a66a53b18b18)이번 장에서는 도커 API를 안전하게 외부로 공개하는 방법을 익히고, 이를 활용해 로컬 컴퓨터 혹은 지속적 통합-지속적 배포 파이프라인에서 도커 엔진에 접근해 보는 방법을 배운다.
+
 # 15.1 도커 API 엔드포인트 형태
+이번 절을 끝까지 읽고 나면 도커 엔진 원격 접근이 어떤 식으로 동작하는지 이해할 수 있을 것이므로 비보안 HTTP 접근 대신 더 안전한 수단을 택하게 될 것이다.<br>
 
+[실습] 원격 접근은 도커 엔진 설정에서 허용할 수 있다. 윈도 10이나 맥에서 도커 데스크톱을 사용 중이라면 고래 아이콘을 클릭해 메뉴에서 Settings를 선택한 다음,<br>
+      Expose Daemon on tcp://localhost:2375 Without TLS 항목을 체크하라. 그림 15-1에 해당 설정 화면을 실었다. 설정을 저장하면 도커 엔진이 재시작 한다.<br>
 
+<br>
+도커 API로 HTTP 요청을 보내 원격 접근 허용 설정이 잘 적용됐는지 확인해 보자. 명령행 도구에 TCP 호스트 주소를 인자로 주어 사용해 봐도 알 수 있다.<br>
 
+[실습] 도커 명령행 도구로도 host 인잣값을 지정해 원격 도커 엔진에 접근할 수 있다. 로컬 호스트에 원격 접근도 가능하다. 그러나 이 경우에는 TCP대신 로컬 채널을 사용한다.<br>
 
+> 로컬 도커 엔진에 TCP 프로토콜을 통해 접근<br>
+> docker --host tcp://localhost:2375 container ls<br>
+> 이번에는 HTTP를 통해 REST API로 접근<br>
+> curl http://localhost:2375/containers/json<br>
 
+<br>
 
+<img src="https://github.com/user-attachments/assets/c875c338-fd4b-4666-8614-2bb79779f3e5" style="width:50%">
 
+<br>
+그럼 이제 우리가 도커 서버를 원격으ㅏ로 접근하게 해 달라고 요청했을 때 운영팀이 느꼈을 공포를 한번 상상해 보자. 이것은 다시말해, 해당 서버의 도커를 누구든지 다룰 수 있게 해 달라는 것과 다름 없다.<br>
+그것은 아무 보안 수단도 없이 흔적도 남기지 않을 방법으로 말이다. 도커 엔진에 대한 원격 접근이 얼마나 위험해질 수 있는지 간과해서는 안 된다.
+
+[실습] 도커 엔진에 대한 비보안 원격 접근을 허용하는 것이 왜 위험한지 직접 체험해 보자. 먼저 도커 엔진을 실행 중인 컴퓨터의 디스크를 마운트한 컨테이너를 실행한다.<br>
+      이 컨테이너를 통해 호스트의 파일 시스템을 마음대로 뒤질 수 있다.<br>
+<br>
+
+> 리눅스 컨테이너 환경의경우<br>
+> docker --host tcp://localhost:2375 container run -it -v /:host-drive diamol/base<br>
+> 컨테이너 안에서 호스트 컴퓨터의 파일 시스템을 뒤질 수 있다.<br>
+> ls<br>
+> ls host-drive<br>
+
+<br>
+
+![image](https://github.com/user-attachments/assets/dfe2441d-b320-4ce9-87bb-d309b77367c4)
+
+<br>
+절대 도커 엔진에 비보안 원격 접근을 허용해서는 안 된다.<br>
 
 # 15.2 보안 원격 접근을 위한 도커 엔진 설정
 
