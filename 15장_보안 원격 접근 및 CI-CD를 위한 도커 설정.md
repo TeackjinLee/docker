@@ -43,15 +43,86 @@
 
 # 15.2 보안 원격 접근을 위한 도커 엔진 설정
 
+도커에는 API가 요청을 받아들일 수 있는 채널이 두 가지 더 있다. 이 두 가지 채널 모두 보안 채널이다.<br>
+첫 번째 채널은 전송 계층 보안으로, HTTPS 프로토콜의 디지털 인증서와 같은 방식의 암호화를 사용한다. 도커 API는 상호 TLS를 사용하므로 서버와 클라이언트 각각 인증서를 갖는다.<br>
+서버의 인증서는 자신을 증명하고 전송되는 내용을 암호화하는 데 사용되며, 클라이언트 인증서는 자신을 증명하는 데 사용된다.<br>
+두 번쨰 채널은 보안 셸(Secure Shell, SSH) 프로토콜이다. 이 프로토콜은 리눅스 서버에 원격 접속 하는 표준 프로토콜이지만, 윈도에서도 사용 가능하다. SSH로 원격 서버에 접근하려면 사용자명과 패스워드 혹은 피밀키가 필요하다.<br>
+<br>
 
+![image](https://github.com/user-attachments/assets/972ecd5b-1070-4195-a851-66941bb8d1c5)
 
+<br>
+우선 상호 TLS를 이용해 도커 엔진의 보안 원격 접근을 설정해 보자. 상호 TLS를 사용하려면 먼저 인증서와 키 파일 쌍을 두개 만들어야 한다.<br>
+키 파일은 인증서의 패스워드 역할을 한다. 하나는 도커 API가 사용하고, 다른 하나는 클라이언트에서 사용된다.<br>
 
+[실습] Play with Docker 웹 사이트에 로그인한 후 노드 하나를 생성하라. 그리고 같은 세션에서 인증서를 배포할 컨테이너를 실행한다. 그다음에는 도커 엔진이 이 인증서를 사용하도록 설정한 후 도커를 재시작하라.<br>
 
+> 인증서를 둘 디렉터리를 생성하라<br>
+> mkdir -p /diamol-certs<br>
+> 인증서 및 설정값을 적용할 컨테이너를 실행한다.<br>
+> docker container run -v /diamol-certs:/certs -v /etc/docker:/docker diamol/pwd-tls:server<br>
+> 새로운 설정을 적용해 도커를 재시작한다.<br>
+> pkill dockerd<br>
+> dockerd &>/docker.log &<br>
 
+<br>
+
+![image](https://github.com/user-attachments/assets/7689cd39-37c2-4e32-857e-85b94b147478)
+
+<br>
+
+![image](https://github.com/user-attachments/assets/7a0eb19a-f233-4a7f-995f-28a11b98ee8a)
+
+<br>
+TLS를 통해 도커 엔진에 접근하려면 인증 기관과 한 싸으이 인증서(클라이언트/서버 인증서)가 필요하다.
+<br>
+이제 도커 엔진 원격 접근에 보안이 적용됐다. 지금부터 인증 기관 인증서, 클라이언트 인증서및 키 없이 curl로 REST API를 호출하거나 도커 명령행 도구로 이 원격 도커 엔진에 명령을 내릴수 없다.<br>
+클라이언트 TLS없이 API사용을 시도하면 도커 엔진이 접근을 차단한다.<br>
+
+[실습] 실행 중인 도커 엔진에 접근할 떄는 항상 2376번 포트를 사용해야 한다. 앞서 2376번 포트를 개방할 때 복사한 현재 세션의 도메인을 사용한다. 이제 원격 도커 엔진에 접근해 보자.<br>
+
+> address 항목에서 현재 세션의 도메인을 복사한다 #대략 ip172-18-0-62-b09pj8nad2eg008a76e0-6379.direct.Labs.play-with-docker.com과 # 비슷한 값이다<br>
+> 도메인을 환경 변수로 설정한다(윈도)<br>
+> SpwdDomain="<나의_현재세션_pwd_도메인>"<br>
+> 도메인을 환경 변수로 설정한다(리눅스)<br>
+> pwdDomain="<나의_현재세션_pwd_도메인>"<br>
+> 도커 API에 직접 접근을 시도한다<br>
+> curl "http://$pwdDomain/containers/json"<br>
+> 명령행 도구로도 직접 접근을 시도한다<br>
+> docker --host tcp://sowdDomain" container ts<br>
+> 클라이언트 인증서를 로컬 컴퓨터로 추출한다<br>
+> mkdir -p /tmp/pwd-certs<br>
+> cd ./ch15/exercises<br>
+> tar -xvf pwd-client-certs -C /tmp/pwd-certs<br>
+> 클라이언트를 사용해 도커 엔진에 접근을 시도한다<br>
+> docker --host "tcp://$pwdDomain" --tlsverify --tlscacert /tmp/pwd-certs/ca.pem --tlscert /tmp/pwd-certs/client-cert.pem --tlskey /tmp/pwd-cer<br>
+> ts/client-key.pem container ls<br>
+> 도커 명령행 도구로 명령을 내릴 수 있다<br>
+> docker --host "tcp://$pwdDomain" --tlsverify --tlscacert /tmp/pwd-certs/ca.pem --tlscert /tmp/pwd-certs/client-cert.pem --tlskey /tmp/pwd-cer<br>
+> ts/client-key.pem container run -d -P diamol/apache<br>
+
+<br>
+
+[실습] Play with Docker 웹 사이트의 현재 세션으로 돌아가자. node1의 IP주소를 옮겨 적은 뒤, 다른 노드를 하나 더 생성한다. 다음 명령을 입력해 node2에서 SSH를 통해 node1에서 실행 중인 도커 엔진에 명려을 내려 보자
+
+> node1의 IP 주소를 환경 변수로 정의한다<br>
+> node1ip="<node1-ip-address-goes-here>"<br>
+> 접속 테스트를 위해 SSH로 접속을 시도한다<br>
+> ssh root@node1ip<br>
+> exit<br>
+> node2에서 해당 노드에서 실행 중인 컨테이너의 목록을 확인한다<br>
+> docker container ls<br>
+> node1에서 원격으로 접근한 도커 엔진에서 실행 중인 컨테이너의 목록을 확인한다<br>
+> docker -H ssh://root@node1ip container ls<br>
+
+Play With Docker를 사용하면 이 과정이 매우 간단해 진다.<br>
+
+![image](https://github.com/user-attachments/assets/89c6bc9f-4bd2-4690-828f-523434c6b953)
 
 
 
 # 15.3 도커 컨텍스트를 사용해 원격 엔진에서 작업하기
+
 
 
 
