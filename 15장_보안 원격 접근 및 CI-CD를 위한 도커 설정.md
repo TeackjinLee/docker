@@ -95,11 +95,9 @@ TLS를 통해 도커 엔진에 접근하려면 인증 기관과 한 싸으이 �
 > cd ./ch15/exercises<br>
 > tar -xvf pwd-client-certs -C /tmp/pwd-certs<br>
 > 클라이언트를 사용해 도커 엔진에 접근을 시도한다<br>
-> docker --host "tcp://$pwdDomain" --tlsverify --tlscacert /tmp/pwd-certs/ca.pem --tlscert /tmp/pwd-certs/client-cert.pem --tlskey /tmp/pwd-cer<br>
-> ts/client-key.pem container ls<br>
+> docker --host "tcp://$pwdDomain" --tlsverify --tlscacert /tmp/pwd-certs/ca.pem --tlscert /tmp/pwd-certs/client-cert.pem --tlskey /tmp/pwd-certs/client-key.pem container ls<br>
 > 도커 명령행 도구로 명령을 내릴 수 있다<br>
-> docker --host "tcp://$pwdDomain" --tlsverify --tlscacert /tmp/pwd-certs/ca.pem --tlscert /tmp/pwd-certs/client-cert.pem --tlskey /tmp/pwd-cer<br>
-> ts/client-key.pem container run -d -P diamol/apache<br>
+> docker --host "tcp://$pwdDomain" --tlsverify --tlscacert /tmp/pwd-certs/ca.pem --tlscert /tmp/pwd-certs/client-cert.pem --tlskey /tmp/pwd-certs/client-key.pem container run -d -P diamol/apache<br>
 
 <br>
 
@@ -120,10 +118,19 @@ Play With Docker를 사용하면 이 과정이 매우 간단해 진다.<br>
 ![image](https://github.com/user-attachments/assets/89c6bc9f-4bd2-4690-828f-523434c6b953)
 
 
-
 # 15.3 도커 컨텍스트를 사용해 원격 엔진에서 작업하기
+<br>
+[실습] TLS 보안이 설정된 Play with Docker 내 도커 엔진의 도메인과 인증서로 컨텍스트를 생성한다.
+<br>
 
+> Play with Docker 내 도커 엔진의 도메인과 인증서로 컨텍스트를 생성한다<br>
+> docker context create pwd-tls --docker "host=tcp://$pwdDomain,ca=/tmp/pwd-certs/ca.pem,cert=/tmp/pwd-certs/client-cert.pem,key=/tmp/pwd-certs/client-key.pem"<br>
+> SSH 보안을 적용한 경우<br>
+> docker context create local-tls --docker "host=ssh://user@server"<br>
+> 컨텍스트 목록을 확인한다<br>
+> docker context ls<br>
 
+<br>
 
 
 
