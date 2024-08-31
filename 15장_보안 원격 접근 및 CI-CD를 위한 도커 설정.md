@@ -176,10 +176,16 @@ docker context use 명령으로 컨텍스트를 전환하면 시스템 전체에
 
 # 15.4 지속적 통합 파이프라인에 지속적 배포 추가하기
 
+[실습] 11장에서 만들었던 것과 비슷하게 로컬 Git 서버, 도커 레스스트리, 젠키스 서버로 구성된 빌드 인프라스트럭처를 만들 것이다.<br>
+이들 구성 요소는 모두 컨테이너로 실행된다. 젠킨스 서버가 가동되면 로컬 컴퓨터에 있는 Play with Docker 내 도커 엔진에 대한 인증
+서<br> 
+파일로 인증 수단을 만드는 스크립트가 실행된다. 따라서 CD단계는 Play with Docker 내 도커 엔진을 대상으로 실행한다.<br>
+<br>
 
+> 컨테이너를 실행한다.(리눅스 컨테이너)<br>
+> docker-compose -f ./docker-compose.yml -f ./docker-compose-linux.yml up -d<br>
 
-
-
+<br>
 
 
 
